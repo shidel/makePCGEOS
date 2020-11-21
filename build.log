@@ -1,0 +1,148 @@
+openSUSE Leap 15.2
+Linux lazarus.local 5.3.18-lp152.50-default #1 SMP Tue Nov 10 21:02:48 UTC 2020 (29ac38d) x86_64 x86_64 x86_64 GNU/Linux
+sed (GNU sed) 4.4
+This is perl 5, version 26, subversion 1 (v5.26.1) built for x86_64-linux-thread-multi
+
+Already up to date.
+removed directory 'release/Installed/Tools/utils'
+removed directory 'release/Installed/Tools/compat'
+removed directory 'release/Installed/Tools/winutil'
+removed directory 'release/Installed/Tools/swat/tcl'
+removed directory 'release/Installed/Tools/swat/ntcurses'
+removed directory 'release/Installed/Tools/swat/curses'
+removed directory 'release/Installed/Tools/swat/termcap'
+removed directory 'release/Installed/Tools/swat'
+removed directory 'release/Installed/Tools/esp'
+removed directory 'release/Installed/Tools/uicpp'
+removed directory 'release/Installed/Tools'
+removed directory 'release/Installed'
+removed directory 'release'
+Open Watcom Make Version 2.0 beta Nov 21 2020 10:47:06 (64-bit)
+Copyright (c) 2002-2020 The Open Watcom Contributors. All Rights Reserved.
+Portions Copyright (c) 1988-2002 Sybase, Inc. All Rights Reserved.
+Source code is available under the Sybase Open Watcom Public License.
+See http://www.openwatcom.org/ for details.
+	cd ../lib/sprite
+	wmake sprite.lib all
+Open Watcom Make Version 2.0 beta Nov 21 2020 10:47:06 (64-bit)
+Copyright (c) 2002-2020 The Open Watcom Contributors. All Rights Reserved.
+Portions Copyright (c) 1988-2002 Sybase, Inc. All Rights Reserved.
+Source code is available under the Sybase Open Watcom Public License.
+See http://www.openwatcom.org/ for details.
+	cd ../../pmake
+	cd ../lib/lst
+	wmake lst.lib all
+Open Watcom Make Version 2.0 beta Nov 21 2020 10:47:06 (64-bit)
+Copyright (c) 2002-2020 The Open Watcom Contributors. All Rights Reserved.
+Portions Copyright (c) 1988-2002 Sybase, Inc. All Rights Reserved.
+Source code is available under the Sybase Open Watcom Public License.
+See http://www.openwatcom.org/ for details.
+	cd ../../pmake
+	%write pmake.lnk NAME   pmake.exe
+	%write pmake.lnk SYSTEM NT_WIN
+	%write pmake.lnk RU CON
+	%write pmake.lnk libfile ../lib/sprite/sprite.lib
+	%write pmake.lnk libfile ../lib/lst/lst.lib
+	%write pmake.lnk library kernel32
+	%write pmake.lnk FILE   {arch.obj compat.obj cond.obj customslib.obj dir.obj job.obj main.obj make.obj parse.obj rmt.obj rpc.obj str.obj suff.obj targ.obj var.obj}
+	wlink  @pmake.lnk
+Open Watcom Linker Version 2.0 beta Nov 21 2020 10:46:51 (64-bit)
+Copyright (c) 2002-2020 The Open Watcom Contributors. All Rights Reserved.
+Portions Copyright (c) 1985-2002 Sybase, Inc. All Rights Reserved.
+Source code is available under the Sybase Open Watcom Public License.
+See http://www.openwatcom.org/ for details.
+loading object files
+searching libraries
+Warning! W1027: file clib3r.lib(strtol.c): redefinition of strtol_ ignored
+creating a Windows NT windowed executable
+	cp pmake.exe ../../../bin/pmake.exe
+	cp pmake.e ../../../bin/pmake
+--- Tools/utils ---
+mkdir -p /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/utils ;  cd /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/utils ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/utils all
+Can't figure out how to make all (continuing)
+--- Tools/compat ---
+mkdir -p /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/compat ;  cd /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/compat ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/compat all
+Can't figure out how to make all (continuing)
+--- Tools/winutil ---
+mkdir -p /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/winutil ;  cd /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/winutil ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/winutil all
+Can't figure out how to make all (continuing)
+--- Tools/swat/tcl ---
+mkdir -p /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/swat/tcl ;  cd /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/swat/tcl ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/swat/tcl all
+Can't figure out how to make all (continuing)
+--- Tools/swat/ntcurses ---
+mkdir -p /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/swat/ntcurses ;  cd /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/swat/ntcurses ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/swat/ntcurses all
+Can't figure out how to make all (continuing)
+--- Tools/swat/curses ---
+mkdir -p /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/swat/curses ;  cd /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/swat/curses ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/swat/curses all
+Can't figure out how to make all (continuing)
+--- Tools/swat/termcap ---
+mkdir -p /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/swat/termcap ;  cd /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/swat/termcap ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/swat/termcap all
+Can't figure out how to make all (continuing)
+--- Tools/esp ---
+mkdir -p /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/esp ;  cd /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/esp ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/esp installlinux ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/esp installwin32
+Can't figure out how to make installlinux (continuing)
+Can't figure out how to make installwin32 (continuing)
+--- Tools/uicpp ---
+mkdir -p /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/uicpp ;  cd /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/uicpp ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/uicpp installlinux ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/uicpp installwin32
+Can't figure out how to make installlinux (continuing)
+Can't figure out how to make installwin32 (continuing)
+--- Tools/goc ---
+mkdir -p /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/goc ;  cd /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/goc ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/goc installlinux ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/goc installwin32
+Can't figure out how to make installlinux (continuing)
+Can't figure out how to make installwin32 (continuing)
+--- Tools/grev ---
+mkdir -p /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/grev ;  cd /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/grev ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/grev installlinux ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/grev installwin32
+Can't figure out how to make installlinux (continuing)
+Can't figure out how to make installwin32 (continuing)
+--- Tools/loc ---
+mkdir -p /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/loc ;  cd /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/loc ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/loc installlinux ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/loc installwin32
+Can't figure out how to make installlinux (continuing)
+Can't figure out how to make installwin32 (continuing)
+--- Tools/nmkmf ---
+mkdir -p /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/nmkmf ;  cd /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/nmkmf ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/nmkmf installlinux ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/nmkmf installwin32
+Can't figure out how to make installlinux (continuing)
+Can't figure out how to make installwin32 (continuing)
+--- Tools/pmake/makedpnd ---
+mkdir -p /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/pmake/makedpnd ;  cd /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/pmake/makedpnd ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/pmake/makedpnd installlinux ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/pmake/makedpnd installwin32
+Can't figure out how to make installlinux (continuing)
+Can't figure out how to make installwin32 (continuing)
+--- Tools/glue ---
+mkdir -p /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/glue ;  cd /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/glue ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/glue installlinux ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/glue installwin32
+Can't figure out how to make installlinux (continuing)
+Can't figure out how to make installwin32 (continuing)
+--- Tools/uic ---
+mkdir -p /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/uic ;  cd /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/uic ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/uic installlinux ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/uic installwin32
+Can't figure out how to make installlinux (continuing)
+Can't figure out how to make installwin32 (continuing)
+--- Tools/pmake/findlbdr ---
+mkdir -p /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/pmake/findlbdr ;  cd /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/pmake/findlbdr ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/pmake/findlbdr installlinux ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/pmake/findlbdr installwin32
+Can't figure out how to make installlinux (continuing)
+Can't figure out how to make installwin32 (continuing)
+--- Tools/geodump ---
+mkdir -p /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/geodump ;  cd /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/geodump ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/geodump installlinux ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/geodump installwin32
+Can't figure out how to make installlinux (continuing)
+Can't figure out how to make installwin32 (continuing)
+--- Tools/sym2dis ---
+mkdir -p /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/sym2dis ;  cd /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/sym2dis ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/sym2dis installlinux ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/sym2dis installwin32
+Can't figure out how to make installlinux (continuing)
+Can't figure out how to make installwin32 (continuing)
+--- Tools/ldf2sls ---
+mkdir -p /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/ldf2sls ;  cd /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/ldf2sls ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/ldf2sls installlinux ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/ldf2sls installwin32
+Can't figure out how to make installlinux (continuing)
+Can't figure out how to make installwin32 (continuing)
+--- Tools/swat ---
+mkdir -p /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/swat ;  cd /home/jerome/Downloads/makePCGEOS/release/Installed/Tools/swat ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/swat installlinux ;  pmake -k -I/home/jerome/Downloads/makePCGEOS/release/Installed/Tools/swat installwin32
+Can't figure out how to make installlinux (continuing)
+Can't figure out how to make installwin32 (continuing)
+--- Installed/Loader/Text ---
+mkdir -p ../Installed/Loader/Text
+cd ../Installed/Loader/Text
+pmake -k -I../Installed/Loader/Text full
+"Makefile", line 16: Could not find geos.mk
+"Makefile", line 17: Could not find gpath.mk
+"Makefile", line 22: Could not find geode.mk
+Fatal errors encountered -- cannot continue
+*** Error code 1
+pmake: 1 error
+Legacy library newgetopt.pl will be removed from the Perl core distribution in the next major release. Please install it from the CPAN distribution Perl4::CoreLibs. It is being used at buildbbx.pl, line 92.
+ERROR: %LOCAL_ROOT% variable must be set.

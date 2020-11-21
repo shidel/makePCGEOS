@@ -18,8 +18,8 @@ fi
 
 # display some version information
 if [[ -e /etc/os-release ]] ; then
-	grep -i PRETTY_NAME /etc/os-release | cut -d '"' -f 2	
-fi	
+	grep -i PRETTY_NAME /etc/os-release | cut -d '"' -f 2
+fi
 
 uname -a
 sed --version | grep -i '^sed'
@@ -60,7 +60,7 @@ cd "${SRCS}/pcgeos/Tools/pmake/pmake"
 wmake install
 
 cd "${SRCS}/pcgeos/Installed/Tools"
-pmake
+pmake install
 
 cd "${SRCS}/pcgeos/Installed"
 pmake
