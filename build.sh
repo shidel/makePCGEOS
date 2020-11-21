@@ -52,8 +52,8 @@ SRCS=${PWD}
 # configure build environment
 export WATCOM=${PWD}/watcom
 export PATH=${PATH}:${WATCOM}/binl64:${WATCOM}/binnt:${PWD}/pcgeos/bin
-export ROOT_DIR=${SRCS}/release
-export LOCAL_DIR=
+export ROOT_DIR=${SRCS}/pcgeos
+export LOCAL_DIR=${SRCS}/release
 
 # Build PC/GEOS SDK
 cd "${SRCS}/pcgeos/Tools/pmake/pmake"
