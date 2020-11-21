@@ -17,9 +17,10 @@ if [[ "${1}" == "clean" ]] ; then
 fi
 
 # display some version information
-if [[ -e /etc/SUSE-brand ]] ; then
-	echo "$(head -n1 /etc/SUSE-brand)$(grep -i VERSION /etc/SUSE-brand | cut -d '=' -f 2)"	
+if [[ -e /etc/os-release ]] ; then
+	grep -i PRETTY_NAME /etc/os-release | cut -d '"' -f 2	
 fi	
+
 uname -a
 sed --version | grep -i '^sed'
 perl --version | grep -i 'version'
