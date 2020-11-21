@@ -12,7 +12,7 @@ function remove () {
 }
 
 if [[ "${1}" == "clean" ]] ; then
-	remove watcom pcgeos ow-snapshot.tar.gz
+	remove watcom pcgeos ow-snapshot.tar.gz release
 	exit 0
 fi
 
