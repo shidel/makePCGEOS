@@ -45,11 +45,13 @@ if [[ ! -d watcom ]] ; then
 	remove ow-snapshot.tar.gz
 fi;
 
+remove release
 SRCS=${PWD}
+
 # configure build environment
 export WATCOM=${PWD}/watcom
 export PATH=${PATH}:${WATCOM}/binl64:${WATCOM}/binnt:${PWD}/pcgeos/bin
-export ROOT_DIR=
+export ROOT_DIR=${SRCS}/release
 export LOCAL_DIR=
 
 # Build PC/GEOS SDK
