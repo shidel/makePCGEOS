@@ -88,6 +88,14 @@ function clone () {
 }
 
 function yml () {
+
+    if [[ "${SWD}" != "${SWD,,}" ]] ; then
+        echo "The perl script used in the build process restricts the path to all lowercase." >&2
+        echo "Please relocate these files to a directory like \'${SWD,,}\'" >&2
+        echo "Aborted!" >&2
+        return 1
+    fi
+
     local YMLS="${SWD}/pcgeos/.travis.yml"
     local YMLD="${SWD}/makePCGEOS.sh"
     local line
@@ -95,6 +103,9 @@ function yml () {
     local perltee
     local logmsg
     local teefile
+    local bitpatch
+
+    [[ "$(uname -p)" == "x86_64" ]] && bitpatch=true
 
     echo '#!/bin/bash'>"${YMLD}"
     chmod +x "${YMLD}"
@@ -106,6 +117,7 @@ function yml () {
     echo TRAVIS_BUILD_DIR="\"${SWD}/pcgeos\"">>"${YMLD}"
     echo 'cd $TRAVIS_BUILD_DIR || exit 1'>>"${YMLD}"
     echo '[[ -e ow-snapshot.tar.gz ]] && rm ow-snapshot.tar.gz'>>"${YMLD}"
+    echo '[[ -e ow-snapshot.tar ]] && rm ow-snapshot.tar'>>"${YMLD}"
 
     echo ''>>"${YMLD}"
 
@@ -131,6 +143,17 @@ function yml () {
             echo "echo \"log: ${teefile}\">${teefile}">>"${YMLD}"
             line="${line/tee /tee -a }"
         fi
+
+        if [[ ${bitpatch} ]] && [[ "${line/cd \$TRAVIS_BUILD_DIR\/Tools\/sdk}" != "${line}" ]] ; then
+            unset bitpatch
+            echo "# start x86_64 bit patch">>"${YMLD}"
+            echo "cd \$TRAVIS_BUILD_DIR/Installed/Tools/esp">>"${YMLD}"
+            echo "draw_bar 'pmake -L 4 install '>>\$TRAVIS_BUILD_DIR/_build.log">>"${YMLD}"
+            echo "pmake -L 4 install | tee -a \$TRAVIS_BUILD_DIR/_build.log">>"${YMLD}"
+            echo "# end x86_64 bit patch">>"${YMLD}"
+        fi
+
+
         if [[ "${line/.log}" != "${line}" ]] ; then
             teefile="${line#*tee -a }"
             teefile="${teefile%%|*}"
@@ -138,6 +161,8 @@ function yml () {
             logmsg="${logmsg%|*}"
             echo "draw_bar '${logmsg}'>>${teefile}">>"${YMLD}"
         fi
+
+
         echo "${line}">>"${YMLD}"
     done< "${YMLS}"
 
@@ -148,7 +173,7 @@ function main () {
     info
     prepare || return $?
     yml || return $?
-    "${SWD}/makePCGEOS.sh" || return $?
+    "${SWD}/makePCGEOS.sh" 2>&1 | tee pcgeos/_console.log || return $?
     return 0
 }
 
