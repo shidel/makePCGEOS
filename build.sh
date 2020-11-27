@@ -24,7 +24,7 @@ function make_bar () {
     echo "${n}"
 }
 
-function drawbar () {
+function draw_bar () {
     echo ${BAR}
     if [[ "${@}" != "" ]] ; then
         echo "${PWD} : ${@}"
@@ -35,7 +35,7 @@ function drawbar () {
 }
 
 function cleanup () {
-    remove watcom pcgeos ow-snapshot.tar.gz release "${LOG}"*
+    remove pcgeos makePCGEOS.sh release
     return $?
 }
 
@@ -50,7 +50,7 @@ function info () {
 }
 
 # fetch or update to latest repository version of PC-GEOS
-function prep_geos () {
+function prepare_geos () {
     if [[ ! -d pcgeos ]] ; then
         git clone https://github.com/bluewaysw/pcgeos.git || return $?
     else
@@ -61,34 +61,13 @@ function prep_geos () {
     return 0
 }
 
-# if not already downloaded, fetch latest version of WATCOM
-function prep_watcom () {
-    local opts
-    if [[ ! -d watcom ]] ; then
-        remove ow-snapshot.tar.gz || return $?
-        wget https://github.com/open-watcom/open-watcom-v2/releases/download/Current-build/ow-snapshot.tar.gz || return $?
-        mkdir watcom || return $?
-        cd watcom
-        [[ "${VERBOSE}" == yes ]] && opts="-xvzf" || opts="-xzf"
-        tar ${opts} ${SWD}/ow-snapshot.tar.gz || return $?
-        cd ${SWD}
-        remove ow-snapshot.tar.gz || return $?
-    fi
-}
-
 function prepare () {
-    prep_geos || return $?
-    prep_watcom || return $?
+    prepare_geos || return $?
     return 0
 }
 
-function subshell () {
-    /bin/bash ${@}
-    return $?
-}
-
 function filter () {
-    tee -a ${LOG} | grep -i -B 1 "######\|error\|warning\|not found\|can\'t" - | tee -a ${LOG}-errors
+    tee -a ${LOG} | grep -i -B 1 "${BAR}\|error\|warning\|not found\|can\'t" - | tee -a ${LOG}-errors
 }
 
 function process () {
@@ -98,61 +77,80 @@ function process () {
 
 }
 
-# Build PC/GEOS SDK
-function build_sdk () {
-    touch ${LOG}
-    touch ${LOG}-error
+function clone () {
 
-    cd "${BWD}/Tools/pmake/pmake"
-    process wmake install
+    while [[ "${1}" != '' ]] ; do
+        grep -A 1000 "function ${1} ()" "${0}" | grep -m 1 -B 1000 "^}"
+        echo
+        shift
+    done
 
-    cd "${BWD}/Installed/Tools"
-    process pmake -L 4 install
-
-    cd "${BWD}/Installed"
-    process pmake -L 4
-
-    cd "${BWD}/Tools/sdk"
-    process ./makesdk "${OWD}/sdk/pcgeos"
-
-    return 0
 }
 
-function build_target () {
-    cd "${OWD}/sdk"
+function yml () {
+    local YMLS="${SWD}/pcgeos/.travis.yml"
+    local YMLD="${SWD}/makePCGEOS.sh"
+    local line
+    local flag
+    local perltee
+    local logmsg
+    local teefile
 
-    # Build target environment
-    cd "${SWD}/pcgeos/Tools/build/product/bbxensem/Scripts"
-    process perl -I. buildbbx.pl
+    echo '#!/bin/bash'>"${YMLD}"
+    chmod +x "${YMLD}"
+    echo ''>>"${YMLD}"
+    clone make_bar draw_bar >>"${YMLD}"
+    echo 'BAR=$(make_bar)'>>"${YMLD}"
 
-    return 0
-}
+    echo ''>>"${YMLD}"
+    echo TRAVIS_BUILD_DIR="\"${SWD}/pcgeos\"">>"${YMLD}"
+    echo 'cd $TRAVIS_BUILD_DIR || exit 1'>>"${YMLD}"
+    echo '[[ -e ow-snapshot.tar.gz ]] && rm ow-snapshot.tar.gz'>>"${YMLD}"
 
-function build_all () {
-    build_sdk || return $?
-    build_target || return $?
-    return 0
+    echo ''>>"${YMLD}"
+
+    while IFS=""; read line ; do
+        case "${line// }" in
+            'script:' )
+                flag=1
+                continue
+                ;;
+            'before_deploy:' )
+                flag=2
+                ;;
+        esac
+        [[ "${flag}" != '1' ]] && continue
+        line="${line:2}"
+        if [[ "${line/perl}" != "${line}" ]] ; then
+            line="${line}"' | tee '${perltee}'$TRAVIS_BUILD_DIR/_perl.log'
+            perltee="-a "
+        fi
+        if [[ "${line/tee }" != "${line}" ]] && [[ "${line/tee -a }" == "${line}" ]] ; then
+            teefile="${line#*tee }"
+            teefile="${teefile%%|*}"
+            echo "echo \"log: ${teefile}\">${teefile}">>"${YMLD}"
+            line="${line/tee /tee -a }"
+        fi
+        if [[ "${line/.log}" != "${line}" ]] ; then
+            teefile="${line#*tee -a }"
+            teefile="${teefile%%|*}"
+            logmsg="${line%%tee *}"
+            logmsg="${logmsg%|*}"
+            echo "draw_bar '${logmsg}'>>${teefile}">>"${YMLD}"
+        fi
+        echo "${line}">>"${YMLD}"
+    done< "${YMLS}"
+
+    [[ "${flag}" != 2 ]] && return 1 || return 0
 }
 
 function main () {
-#    cleanup || return $?
-    info || return $?
+    info
     prepare || return $?
-    build_all || return $?
-
+    yml || return $?
+    "${SWD}/makePCGEOS.sh" || return $?
+    return 0
 }
-
-# configure build environment
-BWD=${SWD}/pcgeos
-OWD=${SWD}/release
-LOG=${SWD}/build.log
-BAR=$(make_bar)
-VERBOSE=no
-
-export WATCOM=${SWD}/watcom
-export PATH=${PATH}:${WATCOM}/binl64:${BWD}/bin
-export ROOT_DIR=${BWD}
-export LOCAL_DIR=${OWD}
 
 if [[ ${#@} -eq 0 ]] ; then
     main
@@ -174,13 +172,9 @@ else
             "prepare")
                 prepare || exit $?
             ;;
-            "build_sdk")
-                build_sdk || exit $?
+            "release")
+                main || exit $?
             ;;
-            "subshell")
-                subshell || exit $?
-            ;;
-
         esac
         shift;
     done
