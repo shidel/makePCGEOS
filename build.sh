@@ -116,11 +116,14 @@ function yml () {
     echo ''>>"${YMLD}"
     echo TRAVIS_BUILD_DIR="\"${SWD}/pcgeos\"">>"${YMLD}"
     echo 'cd $TRAVIS_BUILD_DIR || exit 1'>>"${YMLD}"
+
+    # remove old Watcom download to allow script reuse
     echo '[[ -e ow-snapshot.tar.gz ]] && rm ow-snapshot.tar.gz'>>"${YMLD}"
     echo '[[ -e ow-snapshot.tar ]] && rm ow-snapshot.tar'>>"${YMLD}"
 
     echo ''>>"${YMLD}"
 
+    # extract build commands from yaml file
     while IFS=""; read line ; do
         case "${line// }" in
             'script:' )
@@ -132,11 +135,17 @@ function yml () {
                 ;;
         esac
         [[ "${flag}" != '1' ]] && continue
+
+        # remove leeading "- " from commands
         line="${line:2}"
+
+        # add logging for perl scripts
         if [[ "${line/perl}" != "${line}" ]] ; then
             line="${line}"' | tee '${perltee}'$TRAVIS_BUILD_DIR/_perl.log'
             perltee="-a "
         fi
+
+        # adjust tee command to not destroy previously logged info
         if [[ "${line/tee }" != "${line}" ]] && [[ "${line/tee -a }" == "${line}" ]] ; then
             teefile="${line#*tee }"
             teefile="${teefile%%|*}"
@@ -144,6 +153,8 @@ function yml () {
             line="${line/tee /tee -a }"
         fi
 
+        # x86_64 bit build patch. esp compiler not automatically building on
+        # 64 bit platforms. Must manually build it. For now.
         if [[ ${bitpatch} ]] && [[ "${line/cd \$TRAVIS_BUILD_DIR\/Tools\/sdk}" != "${line}" ]] ; then
             unset bitpatch
             echo "# start x86_64 bit patch">>"${YMLD}"
@@ -153,7 +164,7 @@ function yml () {
             echo "# end x86_64 bit patch">>"${YMLD}"
         fi
 
-
+        # insert new bar in log before each line that references a log file
         if [[ "${line/.log}" != "${line}" ]] ; then
             teefile="${line#*tee -a }"
             teefile="${teefile%%|*}"
@@ -169,11 +180,53 @@ function yml () {
     [[ "${flag}" != 2 ]] && return 1 || return 0
 }
 
+function sizeof () {
+    local sz=0
+    while [[ "${1}" != '' ]] ; do
+        sz=$(( ${sz} + $(stat --format %s "${1}" 2>/dev/null || echo 0) ))
+        shift
+    done
+    echo ${sz}
+}
+
 function main () {
-    info
+
+    local lsz=-1
+    local pss=0
+    local csz
+
+    info | tee pcgeos/_console.log
+
     prepare || return $?
     yml || return $?
-    "${SWD}/makePCGEOS.sh" 2>&1 | tee pcgeos/_console.log || return $?
+
+    # run the build script up to 5 times. Keep repeating until the output files
+    # stop growing. This is most likely do to esp not being automatically
+    # generated.
+    lsz=-1
+    while [[ $pss -lt 5 ]] ; do
+        (( pss++ ))
+
+        csz=$( sizeof ${SWD}/pcgeos/_out/sdk/*.zip \
+            ${SWD}/pcgeos/_out/sdk/pcgeos/Target/Ensemble.*/localpc/*.zip )
+
+        csz=$(( ${csz} / 1024 )) # probably remove this when pmake no longer
+                                 # changes during each build. It causes the zip
+                                 # file size to fluctuate by a few bytes.
+
+        [[ ${csz} -eq ${lsz} ]] && break
+        lsz=${csz}
+        echo ${csz}
+        echo "Compile pass #${pss}"
+
+        "${SWD}/makePCGEOS.sh" 2>&1 | tee -a pcgeos/_console.log || return $?
+    done
+
+    [[ ! -d ${SWD}/release ]] && mkdir -p ${SWD}/release
+    cp -fav ${SWD}/pcgeos/_out/sdk/*.zip \
+            ${SWD}/pcgeos/_out/sdk/pcgeos/Target/Ensemble.*/localpc/*.zip \
+            release
+
     return 0
 }
 
